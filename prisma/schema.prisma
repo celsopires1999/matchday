@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  playerId  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  version   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  teamId    String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  version   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GameDay {
+  gameDayId String        @id @default(auto()) @map("_id") @db.ObjectId
+  date      DateTime      @db.Date
+  teams     PlayersTeam[]
+  games     Game[]
+  version   Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Game {
+  gameId    String   @id @default(auto()) @map("_id") @db.ObjectId
+  gameDay   GameDay  @relation(fields: [gameDayId], references: [gameDayId])
+  gameDayId String   @db.ObjectId
+  date      DateTime @db.Date
+  number    Int
+  home      Home
+  away      Away
+  version   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+type PlayersTeam {
+  teamId   String       @db.ObjectId
+  teamName String
+  players  TeamPlayer[]
+}
+
+type TeamPlayer {
+  playerId   String @db.ObjectId
+  playerName String
+  gols       Int
+  assists    Int
+}
+
+type Home {
+  teamId   String       @db.ObjectId
+  teamName String
+  gols     Int
+  players  TeamPlayer[]
+}
+
+type Away {
+  teamId   String       @db.ObjectId
+  teamName String
+  gols     Int
+  players  TeamPlayer[]
+}
