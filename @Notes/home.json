@@ -1,0 +1,49 @@
+{
+    "teamId": "670c0eb66b8ddc2bede8a32f",
+    "teamName": "Black",
+    "gols": 17,
+    "players": [
+        {
+            "playerId": "670c0eb66b8ddc2bede8a32b",
+            "playerName": "John Doe",
+            "gols": 0,
+            "assists": 0
+        },
+        {
+            "playerId": "670c0eb66b8ddc2bede8a32c",
+            "playerName": "Jane Doe",
+            "gols": 0,
+            "assists": 0
+        },
+        {
+            "playerId": "670c0eb66b8ddc2bede8a32d",
+            "playerName": "Maria Urquizas",
+            "gols": 0,
+            "assists": 0
+        },
+        {
+            "playerId": "670c0eb66b8ddc2bede8a32e",
+            "playerName": "Regina Harumi",
+            "gols": 0,
+            "assists": 0
+        },
+        {
+            "playerId": "670c0eb66b8ddc2bede8a32f",
+            "playerName": "Simone Portelo",
+            "gols": 0,
+            "assists": 0
+        },
+        {
+            "playerId": "670c0eb66b8ddc2bede8a330",
+            "playerName": "Reinaldo Santos",
+            "gols": 0,
+            "assists": 0
+        },
+        {
+            "playerId": "670c0eb66b8ddc2bede8a331",
+            "playerName": "Ricardo Colombo",
+            "gols": 0,
+            "assists": 0
+        }
+    ]
+}
