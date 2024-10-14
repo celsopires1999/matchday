@@ -26,7 +26,7 @@ export default async function PlayerScore({
         </h1>
       </div>
       <Tabs defaultValue="home">
-        <TabsList className="grid w-full grid-cols-2 h-14">
+        <TabsList className="grid w-full grid-cols-2 h-11">
           <TabsTrigger value="home" className="font-semibold text-lg">
             {game?.home.teamName}
           </TabsTrigger>
