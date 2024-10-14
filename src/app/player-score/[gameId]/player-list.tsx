@@ -168,7 +168,7 @@ export function PlayerList({ game, home }: Props) {
         ))}
       </div>
       <div className="h-32" />
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-md">
+      <div className="fixed bottom-0 left-0 right-0 p-4">
         <div className="mt-6 flex justify-end space-x-4">
           <Button variant="outline" onClick={handleCancel}>
             <X className="mr-2 h-4 w-4" />
