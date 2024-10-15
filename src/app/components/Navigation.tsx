@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "./ModeToggle";
 
-export function Navigation() {
+export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -15,8 +15,7 @@ export function Navigation() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "/players", label: "Players" },
-    { href: "/teams", label: "Teams" },
+    { href: "/services", label: "Services" },
     { href: "/contact", label: "Contact" },
   ];
 
