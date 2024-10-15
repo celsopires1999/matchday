@@ -17,7 +17,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Plus, Trash2, Pencil, Check } from "lucide-react";
 
 interface Player {
@@ -56,130 +55,105 @@ export default function PlayerManagement() {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">Players</h1>
+      <h1 className="text-2xl font-bold mb-4">Players</h1>
 
-      {/* <Card className="shadow-xl hover:shadow-2xl transition-shadow duration-300"> */}
-      <CardContent className="space-y-6 mt-6 p-0">
-        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle>Add New Player</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-2">
-              <Input
-                type="text"
-                value={newPlayerName}
-                onChange={(e) => setNewPlayerName(e.target.value)}
-                placeholder="Enter player name"
-                className="flex-grow"
-              />
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button onClick={addPlayer}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Add Player</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex gap-2 mb-4">
+        <Input
+          type="text"
+          value={newPlayerName}
+          onChange={(e) => setNewPlayerName(e.target.value)}
+          placeholder="Enter player name"
+          className="flex-grow"
+        />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={addPlayer}>
+                <Plus className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Add Player</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
-        {/* oi */}
-        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
-          <CardHeader className="px-3">
-            <CardTitle>Players List</CardTitle>
-          </CardHeader>
-          <CardContent className="p-1">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {players.map((player) => (
-                  <TableRow key={player.id}>
-                    <TableCell>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {players.map((player) => (
+            <TableRow key={player.id}>
+              <TableCell>
+                {editingPlayer?.id === player.id ? (
+                  <Input
+                    type="text"
+                    value={editingPlayer.name}
+                    onChange={(e) =>
+                      setEditingPlayer({
+                        ...editingPlayer,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  player.name
+                )}
+              </TableCell>
+              <TableCell className="text-right">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       {editingPlayer?.id === player.id ? (
-                        <Input
-                          type="text"
-                          value={editingPlayer.name}
-                          onChange={(e) =>
-                            setEditingPlayer({
-                              ...editingPlayer,
-                              name: e.target.value,
-                            })
+                        <Button
+                          onClick={() =>
+                            updatePlayer(player.id, editingPlayer.name)
                           }
-                        />
+                          size="icon"
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
                       ) : (
-                        player.name
+                        <Button
+                          onClick={() => startEditing(player)}
+                          size="icon"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
                       )}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            {editingPlayer?.id === player.id ? (
-                              <Button
-                                onClick={() =>
-                                  updatePlayer(player.id, editingPlayer.name)
-                                }
-                                size="icon"
-                                variant="outline"
-                              >
-                                <Check className="h-4 w-4" />
-                              </Button>
-                            ) : (
-                              <Button
-                                onClick={() => startEditing(player)}
-                                size="icon"
-                                variant="outline"
-                              >
-                                <Pencil className="h-4 w-4" />
-                              </Button>
-                            )}
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>
-                              {editingPlayer?.id === player.id
-                                ? "Save"
-                                : "Edit"}
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="outline"
-                              onClick={() => deletePlayer(player.id)}
-                              size="icon"
-                              className="ml-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Delete</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </CardContent>
-      {/* </Card> */}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{editingPlayer?.id === player.id ? "Save" : "Edit"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        onClick={() => deletePlayer(player.id)}
+                        size="icon"
+                        className="ml-2"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Delete</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
