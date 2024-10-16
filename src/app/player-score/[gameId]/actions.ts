@@ -4,7 +4,7 @@ import { prisma } from "@/server/@prisma/prisma";
 import { checkNotFoundError } from "@/server/errors";
 import { Game } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { GameId } from "./types";
+import { GameId } from "../../types";
 
 export type Response = {
   code: number;
