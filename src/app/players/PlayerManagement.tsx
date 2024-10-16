@@ -2,6 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Tooltip,
@@ -14,8 +22,8 @@ import { Check, Pencil, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { addPlayer, deletePlayer, updatePlayer } from "./actions";
 import { toast } from "sonner";
+import { addPlayer, deletePlayer, updatePlayer } from "./actions";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -28,6 +36,8 @@ function SubmitButton() {
 
 export function PlayerManagement({ players }: { players: Player[] }) {
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
   const router = useRouter();
   const addPlayerFormRef = useRef<HTMLFormElement>(null);
 
@@ -55,15 +65,27 @@ export function PlayerManagement({ players }: { players: Player[] }) {
     router.refresh();
   };
 
-  const handleDeletePlayer = async (formData: FormData) => {
+  const handleDeletePlayer = async (player: Player) => {
+    const formData = new FormData();
+    formData.append("playerId", player.playerId);
     const response = await deletePlayer(formData);
     if (response.code !== 200) {
       toast.error(response.message);
       return;
     }
 
+    setIsDeleteDialogOpen(false);
     toast.success("Player deleted");
     router.refresh();
+  };
+
+  const openDeleteDialog = (player: Player) => {
+    setPlayerToDelete(player);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
   };
 
   return (
@@ -164,21 +186,14 @@ export function PlayerManagement({ players }: { players: Player[] }) {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <form action={handleDeletePlayer}>
-                          <input
-                            type="hidden"
-                            name="playerId"
-                            value={player.playerId}
-                          />
-                          <Button
-                            type="submit"
-                            variant="outline"
-                            size="icon"
-                            className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </form>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                          onClick={() => openDeleteDialog(player)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>Delete</p>
@@ -191,6 +206,31 @@ export function PlayerManagement({ players }: { players: Player[] }) {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete {playerToDelete?.name}? This
+              action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeDeleteDialog}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() =>
+                playerToDelete && handleDeletePlayer(playerToDelete)
+              }
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
