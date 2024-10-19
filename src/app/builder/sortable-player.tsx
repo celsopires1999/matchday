@@ -22,7 +22,7 @@ export function SortablePlayer({ player }: { player: Player }) {
       <div
         ref={setNodeRef}
         style={style}
-        className="bg-secondary p-2 rounded-md"
+        className="rounded-md bg-secondary p-2"
       >
         <div className="font-semibold">{player.name}</div>
         <div className="text-sm text-muted-foreground">{player.position}</div>
@@ -36,7 +36,7 @@ export function SortablePlayer({ player }: { player: Player }) {
       style={style}
       {...attributes}
       {...listeners}
-      className="bg-secondary p-2 rounded-md cursor-move"
+      className="cursor-move touch-none rounded-md bg-secondary p-2"
     >
       <div className="font-semibold">{player.name}</div>
       <div className="text-sm text-muted-foreground">{player.position}</div>
