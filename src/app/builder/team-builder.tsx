@@ -3,11 +3,12 @@
 import {
   closestCenter,
   DndContext,
-  DragOverEvent,
+  DragEndEvent,
   DragOverlay,
   DragStartEvent,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -36,6 +37,7 @@ export default function TeamBuilder() {
   const [teamPlayers, setTeamPlayers] = useState<Player[]>(initialTeamPlayers);
   const sensors = useSensors(
     useSensor(PointerSensor),
+    useSensor(TouchSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -48,6 +50,7 @@ export default function TeamBuilder() {
       <DndContext
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
         sensors={sensors}
         collisionDetection={closestCenter}
       >
@@ -74,7 +77,64 @@ export default function TeamBuilder() {
     setActivePlayer(event.active.data.current?.player);
   }
 
-  function handleDragOver(event: DragOverEvent) {
+  // function handleDragOver(event: DragOverEvent) {
+  function handleDragOver() {
+    // const { active, over } = event;
+    // if (!over) return;
+    // if (active.id !== over.id) {
+    //   const activeContainer = active.data.current?.sortable.containerId;
+    //   const overContainer = over.data.current?.sortable.containerId || over.id;
+    //   if (activeContainer === overContainer) {
+    //     // Reordering within the same list
+    //     if (activeContainer === "availablePlayers") {
+    //       setAvailablePlayers((players) =>
+    //         arrayMove(
+    //           players,
+    //           players.findIndex((p) => p.id === active.id),
+    //           players.findIndex((p) => p.id === over.id),
+    //         ),
+    //       );
+    //     } else if (activeContainer === "teamPlayers") {
+    //       setTeamPlayers((players) =>
+    //         arrayMove(
+    //           players,
+    //           players.findIndex((p) => p.id === active.id),
+    //           players.findIndex((p) => p.id === over.id),
+    //         ),
+    //       );
+    //     }
+    //   } else {
+    //     // Moving between lists
+    //     if (
+    //       activeContainer === "availablePlayers" &&
+    //       overContainer === "teamPlayers"
+    //     ) {
+    //       const { newFromList, newToList } = movePlayer(
+    //         availablePlayers,
+    //         teamPlayers,
+    //         active.id as string,
+    //         over.id as string,
+    //       );
+    //       setAvailablePlayers(newFromList);
+    //       setTeamPlayers(newToList);
+    //     } else if (
+    //       activeContainer === "teamPlayers" &&
+    //       overContainer === "availablePlayers"
+    //     ) {
+    //       const { newFromList, newToList } = movePlayer(
+    //         teamPlayers,
+    //         availablePlayers,
+    //         active.id as string,
+    //         over.id as string,
+    //       );
+    //       setTeamPlayers(newFromList);
+    //       setAvailablePlayers(newToList);
+    //     }
+    //   }
+    // }
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over) return;
     if (active.id !== over.id) {
@@ -131,7 +191,6 @@ export default function TeamBuilder() {
       }
     }
   }
-
   function movePlayer(
     fromList: Player[],
     toList: Player[],
