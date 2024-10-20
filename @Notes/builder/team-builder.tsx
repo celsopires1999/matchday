@@ -4,6 +4,7 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   KeyboardSensor,
@@ -78,60 +79,91 @@ export default function TeamBuilder() {
   }
 
   // function handleDragOver(event: DragOverEvent) {
-  function handleDragOver() {
-    // const { active, over } = event;
-    // if (!over) return;
-    // if (active.id !== over.id) {
-    //   const activeContainer = active.data.current?.sortable.containerId;
-    //   const overContainer = over.data.current?.sortable.containerId || over.id;
-    //   if (activeContainer === overContainer) {
-    //     // Reordering within the same list
-    //     if (activeContainer === "availablePlayers") {
-    //       setAvailablePlayers((players) =>
-    //         arrayMove(
-    //           players,
-    //           players.findIndex((p) => p.id === active.id),
-    //           players.findIndex((p) => p.id === over.id),
-    //         ),
-    //       );
-    //     } else if (activeContainer === "teamPlayers") {
-    //       setTeamPlayers((players) =>
-    //         arrayMove(
-    //           players,
-    //           players.findIndex((p) => p.id === active.id),
-    //           players.findIndex((p) => p.id === over.id),
-    //         ),
-    //       );
-    //     }
-    //   } else {
-    //     // Moving between lists
-    //     if (
-    //       activeContainer === "availablePlayers" &&
-    //       overContainer === "teamPlayers"
-    //     ) {
-    //       const { newFromList, newToList } = movePlayer(
-    //         availablePlayers,
-    //         teamPlayers,
-    //         active.id as string,
-    //         over.id as string,
-    //       );
-    //       setAvailablePlayers(newFromList);
-    //       setTeamPlayers(newToList);
-    //     } else if (
-    //       activeContainer === "teamPlayers" &&
-    //       overContainer === "availablePlayers"
-    //     ) {
-    //       const { newFromList, newToList } = movePlayer(
-    //         teamPlayers,
-    //         availablePlayers,
-    //         active.id as string,
-    //         over.id as string,
-    //       );
-    //       setTeamPlayers(newFromList);
-    //       setAvailablePlayers(newToList);
-    //     }
-    //   }
-    // }
+  // const { active, over } = event;
+  // if (!over) return;
+  // if (active.id !== over.id) {
+  //   const activeContainer = active.data.current?.sortable.containerId;
+  //   const overContainer = over.data.current?.sortable.containerId || over.id;
+  //   if (activeContainer === overContainer) {
+  //     // Reordering within the same list
+  //     if (activeContainer === "availablePlayers") {
+  //       setAvailablePlayers((players) =>
+  //         arrayMove(
+  //           players,
+  //           players.findIndex((p) => p.id === active.id),
+  //           players.findIndex((p) => p.id === over.id),
+  //         ),
+  //       );
+  //     } else if (activeContainer === "teamPlayers") {
+  //       setTeamPlayers((players) =>
+  //         arrayMove(
+  //           players,
+  //           players.findIndex((p) => p.id === active.id),
+  //           players.findIndex((p) => p.id === over.id),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     // Moving between lists
+  //     if (
+  //       activeContainer === "availablePlayers" &&
+  //       overContainer === "teamPlayers"
+  //     ) {
+  //       const { newFromList, newToList } = movePlayer(
+  //         availablePlayers,
+  //         teamPlayers,
+  //         active.id as string,
+  //         over.id as string,
+  //       );
+  //       setAvailablePlayers(newFromList);
+  //       setTeamPlayers(newToList);
+  //     } else if (
+  //       activeContainer === "teamPlayers" &&
+  //       overContainer === "availablePlayers"
+  //     ) {
+  //       const { newFromList, newToList } = movePlayer(
+  //         teamPlayers,
+  //         availablePlayers,
+  //         active.id as string,
+  //         over.id as string,
+  //       );
+  //       setTeamPlayers(newFromList);
+  //       setAvailablePlayers(newToList);
+  //     }
+  //   }
+  // }
+  // }
+
+  function handleDragOver(event: DragOverEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over?.id) return;
+
+    const overContainer = over.data.current?.sortable.containerId || over.id;
+
+    if (overContainer === "teamPlayers") {
+      if (teamPlayers.length !== 0) return;
+      // if (teamPlayers.some((player) => player.id === active.id)) return;
+      const { newFromList, newToList } = movePlayer(
+        availablePlayers,
+        teamPlayers,
+        active.id as string,
+        over.id as string,
+      );
+      setAvailablePlayers(newFromList);
+      setTeamPlayers(newToList);
+    } else {
+      if (availablePlayers.length !== 0) return;
+      // if (availablePlayers.some((player) => player.id === active.id)) return;
+      const { newFromList, newToList } = movePlayer(
+        teamPlayers,
+        availablePlayers,
+        active.id as string,
+        over.id as string,
+      );
+      setTeamPlayers(newFromList);
+      setAvailablePlayers(newToList);
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -197,9 +229,9 @@ export default function TeamBuilder() {
     activeId: string,
     overId: string | null,
   ) {
-    const activeIndex = fromList.findIndex((p) => p.id === activeId);
+    const activeIndex = fromList.findIndex((p) => p?.id === activeId);
     const overIndex = overId
-      ? toList.findIndex((p) => p.id === overId)
+      ? toList.findIndex((p) => p?.id === overId)
       : toList.length;
 
     const newFromList = [...fromList];

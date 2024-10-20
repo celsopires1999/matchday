@@ -18,7 +18,7 @@ export function PlayerList({
   players: Player[];
 }) {
   const playersId = useMemo(
-    () => players.map((player) => player.id),
+    () => players.map((player) => player?.id),
     [players],
   );
   const { setNodeRef } = useDroppable({
@@ -37,7 +37,7 @@ export function PlayerList({
         >
           <div className="min-h-[200px] space-y-2">
             {players.map((player) => (
-              <SortablePlayer key={player.id} player={player} />
+              <SortablePlayer key={player?.id} player={player} />
             ))}
           </div>
         </SortableContext>

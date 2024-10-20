@@ -10,7 +10,7 @@ export function SortablePlayer({ player }: { player: Player }) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: player.id, data: { player } });
+  } = useSortable({ id: player?.id, data: { player } });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -24,8 +24,8 @@ export function SortablePlayer({ player }: { player: Player }) {
         style={style}
         className="rounded-md bg-secondary p-2"
       >
-        <div className="font-semibold">{player.name}</div>
-        <div className="text-sm text-muted-foreground">{player.position}</div>
+        <div className="font-semibold">{player?.name}</div>
+        <div className="text-sm text-muted-foreground">{player?.position}</div>
       </div>
     );
   }
@@ -38,8 +38,8 @@ export function SortablePlayer({ player }: { player: Player }) {
       {...listeners}
       className="cursor-move touch-none rounded-md bg-secondary p-2"
     >
-      <div className="font-semibold">{player.name}</div>
-      <div className="text-sm text-muted-foreground">{player.position}</div>
+      <div className="font-semibold">{player?.name}</div>
+      <div className="text-sm text-muted-foreground">{player?.position}</div>
     </div>
   );
 }

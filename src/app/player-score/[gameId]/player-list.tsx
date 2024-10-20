@@ -1,13 +1,13 @@
 "use client";
 
+import { SaveChangesButton } from "@/components/SaveChangesButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Game, TeamPlayer } from "@prisma/client";
-import { Minus, Plus, Save, X } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { updateGame } from "./actions";
 
@@ -20,13 +20,13 @@ export function PlayerList({ game, home }: Props) {
 
   const initialTeamPlayers = home ? game?.home.players : game?.away.players;
   const [players, setPlayers] = useState<TeamPlayer[]>(
-    initialTeamPlayers || []
+    initialTeamPlayers || [],
   );
 
   const updateStat = (
     id: string,
     stat: "gols" | "assists",
-    increment: boolean
+    increment: boolean,
   ) => {
     setPlayers(
       players.map((player) =>
@@ -35,8 +35,8 @@ export function PlayerList({ game, home }: Props) {
               ...player,
               [stat]: Math.max(0, player[stat] + (increment ? 1 : -1)),
             }
-          : player
-      )
+          : player,
+      ),
     );
   };
 
@@ -81,16 +81,6 @@ export function PlayerList({ game, home }: Props) {
       // Navigate to the dashboard
       router.push("/dashboard");
     }
-  };
-
-  const SaveChangesButton = () => {
-    const { pending } = useFormStatus();
-    return (
-      <Button disabled={pending} type="submit">
-        <Save className="mr-2 h-4 w-4" />
-        Save Changes
-      </Button>
-    );
   };
 
   return (
